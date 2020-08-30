@@ -2,7 +2,6 @@ import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import Home from './pages/Home';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -23,15 +22,43 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route path="/home" component={Home} exact={true} />
-        <Route exact path="/" render={() => <Redirect to="/home" />} />
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
-);
+import PostsScreen from './pages/posts-screen';
+import { createBrowserHistory } from 'history';
+
+const history = createBrowserHistory();
+
+export class App extends React.Component<{}, {}> {
+
+    componentDidMount() {
+        //
+        // UN COMMENT THIS CODE TO REPRO THE PROBLEM AUTOMATICALLY.
+        //
+        // setTimeout(() => {
+        //     history.replace(`/posts/scheduled`);
+        // }, 2000);
+    }
+
+    render() {
+        return (
+            <IonApp>
+              <IonReactRouter history={history}>
+                  <IonRouterOutlet id="main">
+                    <Route 
+                        path="/posts/:name" 
+                        render={props => 
+                            <PostsScreen 
+                                key={props.match.params.name} 
+                                type={props.match.params.name} 
+                                />
+                        } 
+                        exact 
+                        />
+                    <Redirect from="/" to="/posts/drafts" exact />
+                  </IonRouterOutlet>
+              </IonReactRouter>
+            </IonApp>
+        );
+    }
+}
 
 export default App;
