@@ -1,0 +1,7 @@
+{
+  "name": "ionic-set-state-issue",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
